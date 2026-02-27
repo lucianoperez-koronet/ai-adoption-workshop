@@ -1,0 +1,17 @@
+{
+  "name": "flower-catalog-search",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "bff"
+  ],
+  "scripts": {
+    "dev": "npm run dev:bff & npm run dev:frontend",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:bff": "npm run dev -w bff",
+    "build": "npm run build -w bff && npm run build -w frontend",
+    "build:bff": "npm run build -w bff",
+    "build:frontend": "npm run build -w frontend"
+  }
+}

@@ -1,18 +1,47 @@
-# App – your project goes here
+# Flower Catalog Search – Natural Language
 
-This folder is the **placeholder for your team’s project** during the Koronet AI Adoption Workshop.
+Buscador de catálogo de flores con input de lenguaje natural. Un LLM (OpenAI o Gemini) traduce la query a filtros estructurados y se aplican sobre 64 productos de muestra.
 
-## What to do
+## Arquitectura
 
-- **Option A:** Replace this folder with your own app (e.g. clone a starter into `app/` or move your code here).
-- **Option B:** Create your app inside `app/` (e.g. `npm create vite@latest . -- --template react-ts`, or Next.js, or a simple Node/TS script).
+- **Frontend** (React + Vite + Tailwind): puerto 5175
+- **BFF** (Hono + Node): puerto 3001
 
-Keep the rest of the repo (`.cursor/`, `docs/`, `skills/`) at the root so Cursor rules and Skills still apply and the setup stays **replicable**.
+## Cómo ejecutar
 
-## After you add your app
+1. **Configurar BFF** – Copia `.env.example` a `.env` en `bff/`:
 
-- Ensure there is a clear way to run it (e.g. `npm run dev`, `npm start`).
-- Document in the **root README** or in **docs/DEMO_CHECKLIST.md** how to run it and what you built.
-- Add a short “How we used AI” section for the demo and for the replicability criterion.
+   ```bash
+   cd bff && cp .env.example .env
+   ```
 
-Come ready to build.
+   Edita `.env` y configura:
+   - `LLM_PROVIDER=openai` o `gemini`
+   - `OPENAI_API_KEY=sk-...` (si usas OpenAI)
+   - `GEMINI_API_KEY=...` (si usas Gemini)
+
+2. **Iniciar BFF y frontend**:
+
+   ```bash
+   cd app
+   npm run dev:bff    # Terminal 1
+   npm run dev:frontend  # Terminal 2
+   ```
+
+   O ambos: `npm run dev` (BFF en background + frontend).
+
+3. Abrir **http://localhost:5175**
+
+## Ejemplos de búsqueda
+
+- "alstroemeria rojas"
+- "flores rojas de Colombia"
+- "purple alstroemeria"
+- "white flowers 70 cm"
+
+## Build
+
+```bash
+cd app
+npm run build
+```
