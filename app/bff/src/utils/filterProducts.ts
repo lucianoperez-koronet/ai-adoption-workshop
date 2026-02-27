@@ -34,7 +34,7 @@ export function isEmptyQuery(query: CatalogQuery): boolean {
 
 export function filterProducts(products: Product[], query: CatalogQuery): Product[] {
   if (isEmptyQuery(query)) {
-    return products;
+    return [];
   }
 
   return products.filter((p) => {

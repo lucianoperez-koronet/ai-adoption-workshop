@@ -76,12 +76,20 @@ search.post('/', async (c) => {
         return res;
       }
 
-      let filtered = filterProducts(products, catalogQuery);
+      const unrecognized = source === 'nl' && isEmptyQuery(catalogQuery) && !fallback;
+
+      let filtered: Product[] = [];
       let isFallback = false;
       let fallbackMessage: string | undefined;
 
-      if (filtered.length === 0 || (isEmptyQuery(catalogQuery) && fallback)) {
-        if (fallback) {
+      if (unrecognized) {
+        log.info('search', 'Query unrecognized — returning empty results', {
+          userQuery: body.query,
+        });
+      } else {
+        filtered = filterProducts(products, catalogQuery);
+
+        if (filtered.length === 0 && fallback) {
           const fallbackResults = filterByFallback(products, fallback);
           if (fallbackResults.length > 0) {
             filtered = fallbackResults;
@@ -103,6 +111,7 @@ search.post('/', async (c) => {
         catalogQuery,
         filteredCount: filtered.length,
         isFallback,
+        unrecognized,
         totalCatalog: products.length,
         elapsedMs,
       });
@@ -111,6 +120,7 @@ search.post('/', async (c) => {
         data: filtered,
         query: catalogQuery,
         total: filtered.length,
+        ...(unrecognized && { unrecognized: true }),
         ...(isFallback && {
           isFallback: true,
           fallbackMessage,

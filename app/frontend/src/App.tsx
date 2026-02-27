@@ -18,10 +18,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setFallbackMessage(null);
     try {
       const res: SearchResponse = await getAllProducts();
       setProducts(res.data);
@@ -41,10 +43,12 @@ function App() {
     if (!query.trim()) return;
     setSearching(true);
     setError(null);
+    setFallbackMessage(null);
     try {
       const res = await searchProducts(query.trim());
       setProducts(res.data);
       setCatalogQuery(res.query ?? {});
+      if (res.fallbackMessage) setFallbackMessage(res.fallbackMessage);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Search failed');
     } finally {
@@ -55,10 +59,12 @@ function App() {
   const handleRemoveFilter = useCallback(async (updatedQuery: CatalogQuery) => {
     setSearching(true);
     setError(null);
+    setFallbackMessage(null);
     try {
       const res = await searchWithCatalogQuery(updatedQuery);
       setProducts(res.data);
       setCatalogQuery(res.query ?? {});
+      if (res.fallbackMessage) setFallbackMessage(res.fallbackMessage);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to update filters');
     } finally {
@@ -128,6 +134,12 @@ function App() {
                 >
                   Retry
                 </button>
+              </div>
+            )}
+
+            {fallbackMessage && (
+              <div className="mb-4 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-sm">
+                {fallbackMessage}
               </div>
             )}
 

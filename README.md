@@ -16,6 +16,18 @@ Repo for the **Koronet AI Adoption Workshop**: structured AI usage, Cursor + MCP
 
 ---
 
+## Demo app: NL Flower Catalog Search
+
+This repo includes a **reference app** built with the workshop stack:
+
+- **Natural-language flower catalog search**: user types in Spanish or English (e.g. “alstroemeria rojas”, “white flowers from Colombia”); an LLM (OpenAI or Gemini) interprets the query into structured filters; a BFF filters 64 sample products and returns results.
+- **Frontend**: React 19 + Vite + Tailwind, with `NaturalSearchBar`, `ProductGrid`, `ProductCard`, `FilterChips`.
+- **BFF**: Hono + configurable LLM provider (OpenAI / Gemini), `POST /api/search`, shared system prompt and catalog data.
+
+See **[app/README.md](app/README.md)** for run instructions and **[docs/implementation_plan.md](docs/implementation_plan.md)** for architecture and implementation details.
+
+---
+
 ## Before the workshop
 
 1. **Review the Komet AI Playbook** (required):
@@ -29,7 +41,7 @@ Repo for the **Koronet AI Adoption Workshop**: structured AI usage, Cursor + MCP
    - [docs/DEMO_CHECKLIST.md](docs/DEMO_CHECKLIST.md) – 5-minute demo and scoring checklist
 
 3. **Come ready to build.**  
-   Decide as a team what to build; this repo gives you rules, skills, and a placeholder in `app/` to start from.
+   Decide as a team what to build; this repo gives you rules, skills, and a working demo app in `app/` to learn from or extend.
 
 ---
 
@@ -39,17 +51,32 @@ Repo for the **Koronet AI Adoption Workshop**: structured AI usage, Cursor + MCP
 ai-adoption-workshop/
 ├── README.md                 # This file
 ├── docs/
-│   ├── AI_PLAYBOOK_BY_ROLE.md  # Full playbook (in-repo context)
-│   ├── AI_PLAYBOOK_SUMMARY.md  # Playbook summary + evaluation alignment
-│   ├── SKILLS.md              # AI usage: Skills, MCP, Cursor
-│   └── DEMO_CHECKLIST.md      # Demo + scoring checklist
+│   ├── AI_PLAYBOOK_BY_ROLE.md
+│   ├── AI_PLAYBOOK_SUMMARY.md
+│   ├── SKILLS.md
+│   ├── DEMO_CHECKLIST.md
+│   └── implementation_plan.md  # NL Flower Catalog – architecture & plan
 ├── .cursor/
 │   └── rules/                # Cursor AI rules (workshop + MCP)
-├── skills/                   # AI Skills for the hackathon
-│   ├── effective-ai-use/     # Use AI effectively in the build
-│   └── demo-prep/            # Prepare the 5-min demo
-└── app/                      # Your project (replace with your stack)
-    └── README.md              # Placeholder – add your app here
+├── skills/
+│   ├── effective-ai-use/
+│   └── demo-prep/
+└── app/                      # Demo: NL Flower Catalog Search
+    ├── README.md             # Run instructions, env, examples
+    ├── package.json          # npm workspaces (frontend + bff)
+    ├── frontend/             # React 19 + Vite + Tailwind
+    │   └── src/
+    │       ├── components/   # NaturalSearchBar, ProductGrid, ProductCard, FilterChips
+    │       ├── types/
+    │       └── services/
+    └── bff/                  # Hono + LLM (OpenAI | Gemini)
+        ├── .env.example
+        └── src/
+            ├── routes/       # POST /api/search
+            ├── services/llm/ # ICatalogLLMProvider, OpenAI, Gemini
+            ├── prompts/      # catalog search system prompt
+            ├── data/         # 64 products (JSON)
+            └── utils/        # filterProducts
 ```
 
 ---
@@ -58,9 +85,10 @@ ai-adoption-workshop/
 
 1. Clone or open this repo in **Cursor**.
 2. Form your team (3–4 people).
-3. Choose what to build; put it in `app/` (or replace `app/` with your own repo root).
-4. Use **Cursor + MCP + rules + Skills** as you code (see [docs/SKILLS.md](docs/SKILLS.md)).
-5. Before the 5-min slot: run through [docs/DEMO_CHECKLIST.md](docs/DEMO_CHECKLIST.md).
+3. **Run the demo app** (optional): `cd app`, copy `bff/.env.example` → `bff/.env`, set `LLM_PROVIDER` and API key(s), then `npm run dev`. Open http://localhost:5175.
+4. Choose what to build; put it in `app/` or replace with your own project.
+5. Use **Cursor + MCP + rules + Skills** as you code (see [docs/SKILLS.md](docs/SKILLS.md)).
+6. Before the 5-min slot: run through [docs/DEMO_CHECKLIST.md](docs/DEMO_CHECKLIST.md).
 
 ---
 
