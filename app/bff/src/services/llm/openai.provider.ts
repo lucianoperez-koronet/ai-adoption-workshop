@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import type { CatalogQuery, ICatalogLLMProvider } from './types.js';
+import type { CatalogLLMResponse, ICatalogLLMProvider } from './types.js';
 import { CATALOG_SEARCH_SYSTEM_PROMPT } from '../../prompts/catalogSearch.js';
 import { log } from '../../lib/logger.js';
 
@@ -12,7 +12,7 @@ export class OpenAIProvider implements ICatalogLLMProvider {
     this.model = model;
   }
 
-  async interpretQuery(userQuery: string): Promise<CatalogQuery> {
+  async interpretQuery(userQuery: string): Promise<CatalogLLMResponse> {
     const startMs = Date.now();
     log.info('llm.openai', 'interpretQuery started', {
       userQuery,
@@ -28,40 +28,74 @@ export class OpenAIProvider implements ICatalogLLMProvider {
       response_format: {
         type: 'json_schema',
         json_schema: {
-          name: 'catalog_query',
+          name: 'catalog_response',
           strict: true,
           schema: {
             type: 'object',
             properties: {
-              categories: {
-                type: 'array',
-                items: { type: 'string' },
-                description: 'Product categories to filter',
+              query: {
+                type: 'object',
+                description: 'Exact attribute filters for catalog products',
+                properties: {
+                  categories: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Product categories to filter',
+                  },
+                  colors: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Colors to filter',
+                  },
+                  origins: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Origins to filter (MIA, SJO, NL, etc.)',
+                  },
+                  nameContains: {
+                    type: 'string',
+                    description: 'Substring to match in product name',
+                  },
+                  unitType: {
+                    type: 'string',
+                    enum: ['Stem', 'Bunch'],
+                    description: 'Unit type filter',
+                  },
+                  box: {
+                    type: 'string',
+                    description: 'Box type filter',
+                  },
+                },
+                additionalProperties: false,
               },
-              colors: {
-                type: 'array',
-                items: { type: 'string' },
-                description: 'Colors to filter',
-              },
-              origins: {
-                type: 'array',
-                items: { type: 'string' },
-                description: 'Origins to filter (MIA, SJO, NL, etc.)',
-              },
-              nameContains: {
-                type: 'string',
-                description: 'Substring to match in product name',
-              },
-              unitType: {
-                type: 'string',
-                enum: ['Stem', 'Bunch'],
-                description: 'Unit type filter',
-              },
-              box: {
-                type: 'string',
-                description: 'Box type filter',
+              fallback: {
+                type: 'object',
+                description: 'Occasion-based suggestions when no exact match',
+                properties: {
+                  tags: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Occasion/event tags to match',
+                  },
+                  colors: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Suggested colors for the occasion',
+                  },
+                  categories: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Suggested categories for the occasion',
+                  },
+                  message: {
+                    type: 'string',
+                    description: 'Friendly message explaining the suggestion',
+                  },
+                },
+                additionalProperties: false,
               },
             },
+            required: ['query'],
             additionalProperties: false,
           },
         },
@@ -73,12 +107,13 @@ export class OpenAIProvider implements ICatalogLLMProvider {
 
     if (!content) {
       log.warn('llm.openai', 'Empty response from OpenAI', { elapsedMs });
-      return {};
+      return { query: {} };
     }
 
-    const parsed = JSON.parse(content) as CatalogQuery;
+    const parsed = JSON.parse(content) as CatalogLLMResponse;
     log.info('llm.openai', 'interpretQuery completed', {
-      catalogQuery: parsed,
+      catalogQuery: parsed.query,
+      hasFallback: !!parsed.fallback,
       rawContentLength: content.length,
       usage: response.usage,
       elapsedMs,

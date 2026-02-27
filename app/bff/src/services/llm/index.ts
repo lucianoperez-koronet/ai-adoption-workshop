@@ -2,7 +2,7 @@ import type { ICatalogLLMProvider } from './types.js';
 import { OpenAIProvider } from './openai.provider.js';
 import { GeminiProvider } from './gemini.provider.js';
 
-export type { CatalogQuery, ICatalogLLMProvider } from './types.js';
+export type { CatalogQuery, CatalogFallback, CatalogLLMResponse, ICatalogLLMProvider } from './types.js';
 
 export function getCatalogLLMProvider(): ICatalogLLMProvider {
   const provider = process.env.LLM_PROVIDER;

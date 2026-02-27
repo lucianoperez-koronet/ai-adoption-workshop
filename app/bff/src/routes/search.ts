@@ -3,7 +3,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { Hono } from 'hono';
 import { getCatalogLLMProvider } from '../services/llm/index.js';
-import { filterProducts, type Product } from '../utils/filterProducts.js';
+import type { CatalogQuery, CatalogFallback, CatalogLLMResponse } from '../services/llm/types.js';
+import { filterProducts, filterByFallback, isEmptyQuery, type Product } from '../utils/filterProducts.js';
 import {
   createTraceId,
   log,
@@ -36,10 +37,11 @@ search.post('/', async (c) => {
     try {
       const body = await c.req.json<{
         query?: string;
-        catalogQuery?: import('../services/llm/types.js').CatalogQuery;
+        catalogQuery?: CatalogQuery;
       }>();
 
-      let catalogQuery: import('../services/llm/types.js').CatalogQuery;
+      let catalogQuery: CatalogQuery;
+      let fallback: CatalogFallback | undefined;
       let source: 'nl' | 'structured';
 
       if (body?.catalogQuery && typeof body.catalogQuery === 'object') {
@@ -56,9 +58,12 @@ search.post('/', async (c) => {
           source,
         });
         const provider = getCatalogLLMProvider();
-        catalogQuery = await provider.interpretQuery(body.query.trim());
-        log.info('search', 'LLM returned catalogQuery', {
+        const llmResponse: CatalogLLMResponse = await provider.interpretQuery(body.query.trim());
+        catalogQuery = llmResponse.query ?? {};
+        fallback = llmResponse.fallback;
+        log.info('search', 'LLM returned response', {
           catalogQuery,
+          hasFallback: !!fallback,
           source,
         });
       } else {
@@ -71,12 +76,33 @@ search.post('/', async (c) => {
         return res;
       }
 
-      const filtered = filterProducts(products, catalogQuery);
+      let filtered = filterProducts(products, catalogQuery);
+      let isFallback = false;
+      let fallbackMessage: string | undefined;
+
+      if (filtered.length === 0 || (isEmptyQuery(catalogQuery) && fallback)) {
+        if (fallback) {
+          const fallbackResults = filterByFallback(products, fallback);
+          if (fallbackResults.length > 0) {
+            filtered = fallbackResults;
+            isFallback = true;
+            fallbackMessage = fallback.message;
+            log.info('search', 'Fallback applied — occasion-based results', {
+              fallbackTags: fallback.tags,
+              fallbackColors: fallback.colors,
+              fallbackCategories: fallback.categories,
+              fallbackCount: fallbackResults.length,
+            });
+          }
+        }
+      }
+
       const elapsedMs = Date.now() - startMs;
 
       log.info('search', 'Search completed', {
         catalogQuery,
         filteredCount: filtered.length,
+        isFallback,
         totalCatalog: products.length,
         elapsedMs,
       });
@@ -85,6 +111,15 @@ search.post('/', async (c) => {
         data: filtered,
         query: catalogQuery,
         total: filtered.length,
+        ...(isFallback && {
+          isFallback: true,
+          fallbackMessage,
+          fallbackCriteria: {
+            tags: fallback?.tags,
+            colors: fallback?.colors,
+            categories: fallback?.categories,
+          },
+        }),
       });
       res.headers.set('X-Trace-Id', traceId);
       return res;

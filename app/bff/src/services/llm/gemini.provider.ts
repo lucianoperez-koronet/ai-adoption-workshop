@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { CatalogQuery, ICatalogLLMProvider } from "./types.js";
+import type { CatalogLLMResponse, ICatalogLLMProvider } from "./types.js";
 import { CATALOG_SEARCH_SYSTEM_PROMPT } from "../../prompts/catalogSearch.js";
 import { log } from "../../lib/logger.js";
 
@@ -18,7 +18,7 @@ export class GeminiProvider implements ICatalogLLMProvider {
     });
   }
 
-  async interpretQuery(userQuery: string): Promise<CatalogQuery> {
+  async interpretQuery(userQuery: string): Promise<CatalogLLMResponse> {
     const startMs = Date.now();
     log.info("llm.gemini", "interpretQuery started", {
       userQuery,
@@ -35,13 +35,19 @@ export class GeminiProvider implements ICatalogLLMProvider {
 
     if (!text) {
       log.warn("llm.gemini", "Empty response from Gemini", { elapsedMs });
-      return {};
+      return { query: {} };
     }
 
     const stripped = text.trim().replace(/^```json\s*|\s*```$/g, "");
-    const parsed = JSON.parse(stripped) as CatalogQuery;
+    const parsed = JSON.parse(stripped) as CatalogLLMResponse;
+
+    if (!parsed.query && !parsed.fallback) {
+      return { query: parsed as unknown as CatalogLLMResponse['query'] };
+    }
+
     log.info("llm.gemini", "interpretQuery completed", {
-      catalogQuery: parsed,
+      catalogQuery: parsed.query,
+      hasFallback: !!parsed.fallback,
       rawContentLength: text.length,
       elapsedMs,
     });

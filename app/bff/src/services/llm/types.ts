@@ -11,6 +11,22 @@ export interface CatalogQuery {
   box?: string;
 }
 
+/**
+ * When the user describes an occasion/event rather than specific flower attributes,
+ * the LLM returns fallback data so we can suggest relevant products via tags.
+ */
+export interface CatalogFallback {
+  tags?: string[];
+  colors?: string[];
+  categories?: string[];
+  message?: string;
+}
+
+export interface CatalogLLMResponse {
+  query: CatalogQuery;
+  fallback?: CatalogFallback;
+}
+
 export interface ICatalogLLMProvider {
-  interpretQuery(userQuery: string): Promise<CatalogQuery>;
+  interpretQuery(userQuery: string): Promise<CatalogLLMResponse>;
 }
