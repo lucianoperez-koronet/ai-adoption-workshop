@@ -1,0 +1,37 @@
+---
+description: Workshop context, evaluation criteria, and how to use this repo with AI
+globs:
+alwaysApply: true
+---
+
+# Koronet AI Adoption Workshop – Repo Context
+
+## What this repo is for
+
+This repository supports the **Koronet AI Adoption Workshop**: a 3-hour AI-powered build session followed by a 5-minute demo per team. The goal is to move from ad-hoc AI usage to **structured, high-impact** use of AI in the software development lifecycle.
+
+## Format
+
+- **Teams:** 3–4 people per group
+- **Build:** 3 hours with Cursor + MCP + rules + Skills
+- **Demo:** 5 minutes per team
+- **Evaluation:** Effective use of AI, Practical value, Innovation, Clarity of explanation, Replicability
+
+## How to use AI in this repo
+
+1. **Cursor rules** (this folder) – Define how the AI should behave (workshop context, MCP preference, quality checks).
+2. **MCP** – Use available MCP tools (GitHub, browser, Figma, shadcn-ui, etc.) when they fit the task; prefer real actions over simulated ones.
+3. **Skills** – See `skills/` and `docs/SKILLS.md` for task-specific guidance (effective AI use, demo prep).
+4. **Playbook** – Align with the [Komet AI Playbook](https://vertical.atlassian.net/wiki/spaces/DDI/pages/5852954626/AI+Playbooks+by+Role); summary in `docs/AI_PLAYBOOK_SUMMARY.md`.
+
+## App location
+
+The team’s project lives in **`app/`**. It may be empty at first; replace or fill it with your chosen stack (e.g. Next.js, Vite, Node script). Keep the rest of the repo (rules, docs, skills) so the setup stays **replicable**.
+
+## Quality
+
+When the project in `app/` has a build: run `npm run build` (or equivalent) from the relevant root after making changes, and fix any failures before considering the task done.
+
+## Language
+
+Use **English** for code, commits, and documentation in this repo.

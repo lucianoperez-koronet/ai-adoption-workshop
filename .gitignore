@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build / runtime
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Logs and temp
+*.log
+npm-debug.log*
+tmp/
+temp/
+.cache/
+
+# Optional: uncomment if you use Python
+# __pycache__/
+# .venv/
+# *.pyc

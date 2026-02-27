@@ -1,0 +1,26 @@
+---
+description: Prefer MCP tools for real actions; use git via terminal for GitHub when needed
+globs:
+alwaysApply: true
+---
+
+# MCP and tool usage
+
+## MCP (Model Context Protocol)
+
+When the user or the task can benefit from an MCP tool, **use it** instead of describing or simulating the action in text. Examples:
+
+- **GitHub** – Creating/updating repos, branches, files, PRs, issues (use MCP; do not use the `gh` CLI – the user has it configured for another account).
+- **Browser / Chrome DevTools** – Navigating, taking snapshots, filling forms, running demos or E2E flows.
+- **Figma** – Fetching design data or exporting assets when a Figma URL or file key is provided.
+- **shadcn-ui** – Fetching components or blocks for UI scaffolding.
+- **Docker / Postman** – When the task involves containers, API collections, or mocks.
+
+## Git and GitHub
+
+- Use **git in the terminal** (e.g. `git status`, `git add`, `git commit`, `git branch`) for local operations in this repo.
+- Use **GitHub MCP** for remote operations (create repo, push files, create PR, etc.). Do **not** use the `gh` CLI.
+
+## When no MCP tool fits
+
+Proceed with code, file edits, or terminal commands as usual. Prefer the simplest approach that meets the evaluation criteria (practical value, clarity, replicability).
