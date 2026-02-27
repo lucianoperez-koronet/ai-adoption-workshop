@@ -22,7 +22,7 @@ This repository supports the **Koronet AI Adoption Workshop**: a 3-hour AI-power
 1. **Cursor rules** (this folder) – Define how the AI should behave (workshop context, MCP preference, quality checks).
 2. **MCP** – Use available MCP tools (GitHub, browser, Figma, shadcn-ui, etc.) when they fit the task; prefer real actions over simulated ones.
 3. **Skills** – See `skills/` and `docs/SKILLS.md` for task-specific guidance (effective AI use, demo prep).
-4. **Playbook** – Align with the [Komet AI Playbook](https://vertical.atlassian.net/wiki/spaces/DDI/pages/5852954626/AI+Playbooks+by+Role); summary in `docs/AI_PLAYBOOK_SUMMARY.md`.
+4. **Playbook** – Align with the Komet AI Playbook; full text in `docs/AI_PLAYBOOK_BY_ROLE.md`, summary in `docs/AI_PLAYBOOK_SUMMARY.md`. Confluence: [AI Playbooks by Role](https://vertical.atlassian.net/wiki/spaces/DDI/pages/5852954626/AI+Playbooks+by+Role).
 
 ## App location
 

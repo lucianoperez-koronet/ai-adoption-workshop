@@ -1,0 +1,37 @@
+---
+description: Komet AI Playbook – Plan → Agent workflow and when to use each mode (hackathon context)
+globs:
+alwaysApply: true
+---
+
+# Komet AI Playbook (hackathon context)
+
+This repo follows the **Komet AI Playbook** for the Koronet AI Adoption Workshop. Use it to choose the right AI mode and to structure prompts.
+
+## Quick Reference: Plan → Agent Workflow
+
+- **PROMPT** → describe the task  
+- **PLAN** → AI maps the steps (use for multi-file / research tasks)  
+- **AGENT** → AI edits the code  
+- **VERIFY** → you test and review  
+
+| Step | Cursor | When to use |
+| --- | --- | --- |
+| **Plan** | Plan mode / Cmd+L | Multi-file changes, new features, refactors |
+| **Agent** | Agent mode / Cmd+I | Execute the plan: edit files, run commands |
+| **Inline Chat** | Ctrl+K on selection | Single-file fixes, quick explanations, simplify |
+| **Rules/Skills** | `.cursor/rules/*.mdc`, `skills/` | Project conventions so AI follows them automatically |
+
+**When to use Plan → Agent vs Inline Chat:**
+
+- **Plan → Agent:** Any change touching 2+ files, or requiring research across the codebase.
+- **Inline Chat:** Single-block fixes, syntax review, quick explanations.
+
+## Full playbook
+
+The complete playbook (Backend, Fullstack, Tech Lead scenarios, prompt templates, tips & anti-patterns) is in **`docs/AI_PLAYBOOK_BY_ROLE.md`**. Read or reference it when suggesting workflows, prompts, or when to use Plan vs Agent vs Inline.
+
+## Do / Don’t (reminder)
+
+- **Do:** Start in Plan for multi-file work; use rules/Skills for conventions; run build/test after Agent changes; one task per chat.
+- **Don’t:** Accept over-simplified code without review; skip Plan for large features; assume the AI remembers project rules across sessions (use rules/Skills).

@@ -18,11 +18,12 @@ Repo for the **Koronet AI Adoption Workshop**: structured AI usage, Cursor + MCP
 
 ## Before the workshop
 
-1. **Review the Komet AI Playbook** (required):  
-   [AI Playbooks by Role](https://vertical.atlassian.net/wiki/spaces/DDI/pages/5852954626/AI+Playbooks+by+Role)  
-   *(Confluence – log in with your Atlassian account.)*
+1. **Review the Komet AI Playbook** (required):
+   - [AI Playbooks by Role](https://vertical.atlassian.net/wiki/spaces/DDI/pages/5852954626/AI+Playbooks+by+Role) *(Confluence – log in with your Atlassian account.)*
+   - Or use the in-repo copy: [docs/AI_PLAYBOOK_BY_ROLE.md](docs/AI_PLAYBOOK_BY_ROLE.md)
 
 2. **Skim this repo:**
+   - [docs/AI_PLAYBOOK_BY_ROLE.md](docs/AI_PLAYBOOK_BY_ROLE.md) – full playbook (in-repo context for the hackathon)
    - [docs/AI_PLAYBOOK_SUMMARY.md](docs/AI_PLAYBOOK_SUMMARY.md) – short summary aligned with evaluation criteria
    - [docs/SKILLS.md](docs/SKILLS.md) – how we use AI in this repo (Skills, MCP, Cursor)
    - [docs/DEMO_CHECKLIST.md](docs/DEMO_CHECKLIST.md) – 5-minute demo and scoring checklist
@@ -38,7 +39,8 @@ Repo for the **Koronet AI Adoption Workshop**: structured AI usage, Cursor + MCP
 ai-adoption-workshop/
 ├── README.md                 # This file
 ├── docs/
-│   ├── AI_PLAYBOOK_SUMMARY.md # Playbook summary + evaluation alignment
+│   ├── AI_PLAYBOOK_BY_ROLE.md  # Full playbook (in-repo context)
+│   ├── AI_PLAYBOOK_SUMMARY.md  # Playbook summary + evaluation alignment
 │   ├── SKILLS.md              # AI usage: Skills, MCP, Cursor
 │   └── DEMO_CHECKLIST.md      # Demo + scoring checklist
 ├── .cursor/
